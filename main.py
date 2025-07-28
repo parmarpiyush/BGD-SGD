@@ -1,4 +1,8 @@
-import math
+from data_filteration import data_filt
 
+def main():
+    data_filt.prepare_data()
 
-print("hi")
+if __name__ == "__main__":
+    main()
+
