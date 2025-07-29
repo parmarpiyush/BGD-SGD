@@ -5,6 +5,18 @@ class DataFilteration:
     def __init__(self):
         self.data = pd.read_csv('House_Rent_Dataset.csv')
 
+    def extract_floor(self, s):
+
+        nums = s.split()
+        if nums[0] == 'Ground':
+            return (0, int(nums[-1]))
+        elif nums[0] == 'Upper':
+            return (-1, int(nums[-1]))
+        elif nums[0] == 'Lower':
+            return (-2, int(nums[-1]))
+        else:
+            return (int(nums[0]), int(nums[-1]))
+
     def prepare_data(self):
         
         #removing unwanted columns
@@ -24,8 +36,12 @@ class DataFilteration:
         mask = (self.data['Tenant Preferred_Bachelors'] == 0) & (self.data['Tenant Preferred_Family'] == 0)
 
         self.data.loc[mask, ['Tenant Preferred_Bachelors', 'Tenant Preferred_Family']] = 1
+
+        #extracting numberics from string like values from the column
+        self.data[['Floor','Total Floors']] = self.data['Floor'].apply(lambda x: pd.Series(self.extract_floor(x)))
         
         print(self.data)
+
 
 
 data_filt = DataFilteration()
